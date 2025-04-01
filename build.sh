@@ -1,21 +1,30 @@
 #!/bin/bash
 set -e
 
-echo "=== Compilación con Mono Linux ==="
+echo "=== Starting Build Process ==="
+echo "=== Current directory: $(pwd) ==="
+
 cd src/MicroserviceDemo
 
-# Configurar fuentes y compilar el proyecto
-nuget sources Disable -Name nuget.org
-nuget sources add -Name huaweicloud -Source https://repo.huaweicloud.com/repository/nuget/v3/index.json
-nuget restore MicroserviceDemo.csproj
-msbuild MicroserviceDemo.csproj /p:Configuration=Release /p:OutputPath=../../build
+echo "=== Project Contents ==="
+ls -la
 
-echo "=== Compilación completada ==="
+echo "=== Inspecting .csproj File ==="
+cat MicroserviceDemo.csproj
 
-# Regresar a la raíz del repositorio
+echo "=== Restoring Dependencies ==="
+# Usar el comando dotnet restore para restaurar dependencias correctamente
+dotnet restore
+
+echo "=== Building Project with dotnet build ==="
+# Compilación usando dotnet build en lugar de msbuild
+dotnet build -c Release -o ../../build
+
+echo "=== Build Completed ==="
 cd ../..
 
-echo "=== Creando archivo ZIP de la compilación ==="
-zip -r build/archive.zip build/MicroserviceDemo.exe build/MicroserviceDemo.pdb
+echo "=== Creating Build Artifacts ==="
+mkdir -p build
+zip -r build/archive.zip build/*
 
-echo "=== Archivo archivado copiado a build/ ==="
+echo "=== Build Artifacts Created ==="
