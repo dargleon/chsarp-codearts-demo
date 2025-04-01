@@ -1,30 +1,10 @@
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- Propiedades básicas -->
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <OutputType>Exe</OutputType>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MicroserviceDemo</AssemblyName>
     <RootNamespace>MicroserviceDemo</RootNamespace>
-    <Optimize>false</Optimize>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <!-- Incluye los archivos fuente -->
-  <ItemGroup>
-    <!-- Lista explícita o comodín según necesites -->
-    <Compile Include="**\*.cs" />
-  </ItemGroup>
-
-  <!-- Referencias necesarias -->
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-
-  <!-- Importa los targets de C# para definir las tareas de Build -->
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
