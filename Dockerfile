@@ -1,13 +1,23 @@
-FROM mono:latest
+# Usa la imagen oficial de .NET 6.0 SDK
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-# Directorio de trabajo en la imagen
+# Configura el directorio de trabajo
 WORKDIR /app
 
-# Copiar los artefactos compilados desde la carpeta build
-COPY ./build/ ./
+# Copia todo el contenido al contenedor
+COPY . .
 
-# Exponer el puerto en el que la API se ejecuta (5000)
-EXPOSE 5000
+# Restaura dependencias
+RUN dotnet restore ./src/MicroserviceDemo/MicroserviceDemo.csproj
 
-# Comando para ejecutar la aplicación
-CMD ["mono", "MicroserviceDemo.exe"]
+# Compila el proyecto en modo Release
+RUN dotnet build ./src/MicroserviceDemo/MicroserviceDemo.csproj -c Release -o ./build
+
+# Publica el proyecto (opcional pero recomendado)
+RUN dotnet publish ./src/MicroserviceDemo/MicroserviceDemo.csproj -c Release -o ./publish
+
+# Imagen final de runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "MicroserviceDemo.dll"]
